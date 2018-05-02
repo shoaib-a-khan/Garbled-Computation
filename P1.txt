@@ -1,0 +1,39 @@
+Data:
+0: constant 0 		//611 + -611
+1: constant -1  	//-26 + 25
+2: Fuel pump failure 	//-576 + 577
+3: Blocked filter  	//83 + -83
+4: Blocked jet  	//771 + -771
+5: Faulty adjustment	//7 +-6	
+6: L.T. failure		//-36 + 37
+7: H.T. failure		//432 + -432
+8: Ignition system 2	//-733 + 733
+
+
+
+Program:
+// Begin fuel pump failure or blocked filter
+0: subble(2,0,1,3) //={77,-100, 93, 2}+{-75,100,-92, 1}
+1: subble(3,0,3,2) //={721,-111, 35, 367}+{-718,111,-32,-365}
+// Now fuel pump failure contains fuel flow failure
+2: subble(2,1,3,3) //={-59,426,-849,-33}+{61,-425,852,36}
+// begin blocked jet or faulty adjustment
+3: subble(4,0,4,6) //={-188,47,56,0}+{192,-47,-52,6}
+4: subble(5,0,6,5) //={5,0,6,5}+{0,0,0,0}
+// Now blocked jet contains carburetor failure
+5: subble(4,1,6,6) //= {-915,-17,338, 271}+{919,18,-332,-265}
+// Begin L.T. or H.T. failure
+6: subble(6,0,7,9) //={6,-976,-60,89}+{0,976,67,-80} 
+7: subble(7,0,9,8) //={-113,33,9, 438}+{120,-33,0,-430}
+// Now L.T. failure contains ignition system 1
+8: subble(6,1,9,9) //={0,0,0,0}+{6,1,9,9}
+// Begin ignition system 1 and ignition system 2
+9: subble(6,0,12,10) //={-295,-63, 943,-860}+{301,63,-931,870}
+10: subble(8,0,11,12) //={-763,366,-72,121}+{771,-366,83,-109}
+// Now L.T failure contains ignition failure
+11: subble(6,6,12,12) //={567,-223,-24,-868}+{-561,229,36,879}
+// Begin fuel flow failure or carburetor failure
+// or ignition failure
+12: subble(2,0,13,15) //={2,0,0,15}+{0,0,13,0}
+13: subble(4,0,14,15) //={391,-55,728,32}+{-387,55,-714,-17}	
+14: subble(6,0,15,15) //={-91,693,-211,503}+{97,-693,226,-488}
